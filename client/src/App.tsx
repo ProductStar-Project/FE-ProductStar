@@ -1,8 +1,19 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import { GoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 
 function App() {
+  const handleLoginGoogle = async (credentialResponse: any) => {
+    console.log(credentialResponse);
+    try {
+      const res = await axios.post("http://localhost:5000/auth/googleLogin", {
+        tokenId: credentialResponse.credential,
+      });
+      console.log(res);
+    } catch (e) {}
+  };
   return (
     <div className="App">
       <header className="App-header">
@@ -16,7 +27,12 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          <GoogleLogin
+            onSuccess={handleLoginGoogle}
+            onError={() => {
+              console.log("Login Failed");
+            }}
+          />
         </a>
       </header>
     </div>
